@@ -33,14 +33,14 @@ function divide(num1, num2){
     return num1 / num2;
 }
 
-let tmp, num1, num2, result;
+let tmp, num1, num2, result = '';
 let operator = '';
 
 //Display numbers
 const display = document.querySelector('.display');
 let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEventListener('click', function(){
-    if(display.innerHTML == '0' || display.innerHTML == num1 || num1 == result){
-        display.innerHTML = btn.innerHTML;
+    if(display.innerHTML === '0'|| operator !== '' || result !== ''){
+        displayNum(btn.innerHTML);
     } else {
         display.innerHTML += btn.innerHTML;
     }
@@ -50,10 +50,8 @@ let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEve
 //Clear display
 const clearButton = document.querySelector('.clear');
 clearButton.addEventListener('click', function(){
-    display.innerHTML = 0;
-    tmp = 0;
-    num1 = 0;
-    num2 = 0;
+    displayNum(0);
+    resetVariables();
 })
 
 //Calculator operators
@@ -61,20 +59,36 @@ const operatorButtons = document.querySelectorAll('.operator').forEach(btn => bt
     if(operator != ''){
         num2 = tmp;
         result = operate(operator, parseFloat(num1), parseFloat(num2));
+        displayNum(result);
         num1 = result;
-        operator = btn.innerHTML;
+        num2 = ''; 
     } else {
         num1 = tmp;
-        tmp = 0;
-        operator = btn.innerHTML;
+        tmp = '';
     }
+    operator = btn.innerHTML;
 }));
 
 const equalsButton = document.querySelector('.equals');
 equalsButton.addEventListener('click', function(){
     num2 = tmp;
     result = operate(operator, parseFloat(num1), parseFloat(num2));
-    display.innerHTML = result;
+    num1 = '';
+    num2 = '';
+    displayNum(result);
     tmp = result;
     operator = '';
 });
+
+
+function displayNum(str){
+    display.innerHTML = Math.round(parseFloat(str) * 10000000) / 10000000;
+}
+
+function resetVariables(){
+    tmp = '';
+    num1 = '';
+    num2 = '';
+    result = '';
+    operator = '';
+}
