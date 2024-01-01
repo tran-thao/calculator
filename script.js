@@ -33,10 +33,21 @@ function divide(num1, num2){
     return num1 / num2;
 }
 
-let tmp = 0;
+let tmp;
 
 //Display numbers
 const display = document.querySelector('.display');
 let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEventListener('click', function(){
-    display.innerHTML += btn.innerHTML;
+    if(display.innerHTML == '0'){
+        display.innerHTML = btn.innerHTML;
+    } else {
+        display.innerHTML += btn.innerHTML;
+        tmp = display.innerHTML;
+    }
 }));
+
+//Clear display
+const clearButton = document.querySelector('#clear');
+clearButton.addEventListener('click', function(){
+    display.innerHTML = 0;
+})
