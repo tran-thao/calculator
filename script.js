@@ -34,12 +34,12 @@ function divide(num1, num2){
 }
 
 let tmp, num1, num2, result;
-let operator;
+let operator = '';
 
 //Display numbers
 const display = document.querySelector('.display');
 let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEventListener('click', function(){
-    if(display.innerHTML == '0' || display.innerHTML == num1){
+    if(display.innerHTML == '0' || display.innerHTML == num1 || num1 == result){
         display.innerHTML = btn.innerHTML;
     } else {
         display.innerHTML += btn.innerHTML;
@@ -52,13 +52,22 @@ const clearButton = document.querySelector('.clear');
 clearButton.addEventListener('click', function(){
     display.innerHTML = 0;
     tmp = 0;
+    num1 = 0;
+    num2 = 0;
 })
 
 //Calculator operators
 const operatorButtons = document.querySelectorAll('.operator').forEach(btn => btn.addEventListener('click', function(){
-    num1 = tmp;
-    tmp = 0;
-    operator = btn.innerHTML;
+    if(operator != ''){
+        num2 = tmp;
+        result = operate(operator, parseFloat(num1), parseFloat(num2));
+        num1 = result;
+        operator = btn.innerHTML;
+    } else {
+        num1 = tmp;
+        tmp = 0;
+        operator = btn.innerHTML;
+    }
 }));
 
 const equalsButton = document.querySelector('.equals');
@@ -67,4 +76,5 @@ equalsButton.addEventListener('click', function(){
     result = operate(operator, parseFloat(num1), parseFloat(num2));
     display.innerHTML = result;
     tmp = result;
+    operator = '';
 });
