@@ -1,0 +1,17 @@
+.container{
+    display: grid;
+    grid-template-rows: 100px 1fr;
+    width: 400px;
+    height: 500px;
+    background-color: gray;
+    padding: 10px;
+}
+
+.buttons-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.zero{
+    grid-column: 1/3;
+}

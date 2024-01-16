@@ -11,7 +11,12 @@ function operate(operator, num1, num2){
             result = multiply(num1,num2);
             break;
         case '÷':
-            result = divide(num1,num2);
+            if(num2 !== 0){
+                result = divide(num1,num2);
+            }
+            else {
+                alert("You CANNOT divide by 0!!")
+            }
             break;
     }
     return result;
@@ -71,13 +76,15 @@ const operatorButtons = document.querySelectorAll('.operator').forEach(btn => bt
 
 const equalsButton = document.querySelector('.equals');
 equalsButton.addEventListener('click', function(){
-    num2 = tmp;
-    result = operate(operator, parseFloat(num1), parseFloat(num2));
-    num1 = '';
-    num2 = '';
-    displayNum(result);
-    tmp = result;
-    operator = '';
+        num2 = tmp;
+        result = operate(operator, parseFloat(num1), parseFloat(num2));
+        num1 = '';
+        num2 = '';
+        if(result !== '' && !isNaN(result)){
+            displayNum(result);
+        }
+        tmp = result;
+        operator = '';
 });
 
 
