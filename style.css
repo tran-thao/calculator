@@ -45,19 +45,24 @@ button{
     border-radius: 10px;
 }
 
-.display{
-    max-width: 360px;
+.display-container{
+    max-width: 370px;
     grid-area: display;
     text-align: right;
-    font-size: 75px;
-    font-weight: 400;
     border-style: solid;
     border-color: #39A2DB;
     border-width: 5px;
     border-radius: 10px;
     background-color: #FCFCF7;
-    padding: 0px 15px;
+    padding: 0px 10px;
+}
+
+.display{
     color: #226795;
+    font-size: 75px;
+    font-weight: 400;
+    overflow: hidden;
+
 }
 
 .last-col{
