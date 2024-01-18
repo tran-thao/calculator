@@ -107,3 +107,24 @@ function resetVariables(){
     operator = '';
 }
 
+const convertOperator = {
+    '/': '÷',
+    '*': 'x',
+    '-': '-',
+    '+': '+',
+  };
+  
+function handleKeyDown(e) {
+    const key = e.key;
+    
+    if (/^\d$/.test(key)) {
+      handleDigitInput.call({ textContent: key });
+    } else if (['+', '-', '*', '/'].includes(key)) {
+      handleOperatorInput.call({ textContent: convertOperator[key] });
+    } else if (key === 'Enter') {
+      handleEquals();
+    } else if (key === 'Escape') {
+      handleClear();
+    }
+    e.preventDefault();
+}
