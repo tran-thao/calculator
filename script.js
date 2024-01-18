@@ -51,14 +51,15 @@ let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEve
     if(btn.id === 'percent'){
         let temp = curNum/100;
         if(operator === '+' || operator === '-'){
-            temp = curNum*temp;
+            temp = num1*temp;
         }
         display.innerHTML = temp;
     } else if(btn.id === 'sign'){
         display.innerHTML = -display.innerHTML;
-    } else if(curNum === '0' || (num2 === '' && tmp === '')) {
+    } else if((curNum === '0' || (num2 === '' && tmp === '')) && btn.id !=='decimal') {
         displayNum(btn.innerHTML);
     } else {
+        if(btn.id === 'decimal' && display.innerHTML.includes('.')) return
         display.innerHTML += btn.innerHTML;
     }
     tmp = display.innerHTML;
@@ -74,10 +75,8 @@ clearButton.addEventListener('click', function(){
 //Calculator operators
 const operatorButtons = document.querySelectorAll('.operator').forEach(btn => btn.addEventListener('click', function(){
     if(num1 !== ''){
-        num2 = tmp;
+        handleCalculation();
         tmp='';
-        result = operate(operator, parseFloat(num1), parseFloat(num2));
-        displayNum(result);
         num1 = result;
         num2 = '';
         result='';
@@ -90,17 +89,20 @@ const operatorButtons = document.querySelectorAll('.operator').forEach(btn => bt
 
 const equalsButton = document.querySelector('.equals');
 equalsButton.addEventListener('click', function(){
-        num2 = tmp;
-        result = operate(operator, parseFloat(num1), parseFloat(num2));
+        handleCalculation();
         num1 = '';
         num2 = '';
-        if(result !== '' && !isNaN(result)){
-            displayNum(result);
-        }
         tmp = result;
         operator = '';
 });
 
+function handleCalculation(){
+    num2 = tmp;
+    result = operate(operator, parseFloat(num1), parseFloat(num2));
+    if(result !== '' && !isNaN(result)){
+        displayNum(result);
+    }
+}
 
 function displayNum(str){
     display.innerHTML = Math.round(parseFloat(str) * 10000000) / 10000000;
