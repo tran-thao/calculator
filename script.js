@@ -1,111 +1,102 @@
-function operate(operator, num1, num2){
-    let result;
-    switch(operator){
-        case '+':
-            result = add(num1,num2);
-            break;
-        case '-':
-            result = subtract(num1,num2);
-            break;
-        case 'x':
-            result = multiply(num1,num2);
-            break;
-        case '÷':
-            if(num2 !== 0){
-                result = divide(num1,num2);
-            }
-            else {
-                alert("You CANNOT divide by 0!!")
-            }
-            break;
-    }
-    return result;
-}
+//Calculator operations
+const operations = {
+    '+': (num1, num2) => num1 + num2,
+    '-': (num1, num2) => num1 - num2,
+    'x': (num1, num2) => num1 * num2,
+    '÷': (num1, num2) => num2 === 0 ? alert("You CANNOT divide by 0!!") : num1 / num2
+};
 
-function add(num1, num2){
-    return num1 + num2;
-}
-
-function subtract(num1, num2){
-    return num1 - num2;
-}
-
-function multiply(num1, num2){
-    return num1 * num2;
-}
-
-function divide(num1, num2){
-    return num1 / num2;
-}
-
+//Variables storing values for calculations
 let tmp = '';
 let num1 = '';
-let result = '';
 let num2 = '';
 let operator = '';
+let result = '';
 
-//Display numbers
+//DOM elements
 const display = document.querySelector('.display');
-let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEventListener('click', function(){
-    let curNum = display.innerHTML;
+const digitButtons = document.querySelectorAll('.digit');
+const operatorButtons = document.querySelectorAll('.operator');
+const clearButton = document.querySelector('.clear');
+const equalsButton = document.querySelector('.equals');
+
+//Event listeners
+digitButtons.forEach(btn => btn.addEventListener('click', handleDigitInput));
+operatorButtons.forEach(btn => btn.addEventListener('click', handleOperatorInput));
+clearButton.addEventListener('click', handleClear);
+equalsButton.addEventListener('click', handleEquals);
+window.addEventListener('keydown', handleKeyDown);
+
+//Handle number display
+function handleDigitInput(digit){
+    const btn = this;
+    let curNum = display.textContent;
+
     if(btn.id === 'percent'){
-        let temp = curNum/100;
-        if(operator === '+' || operator === '-'){
-            temp = num1*temp;
-        }
-        display.innerHTML = temp;
+        display.textContent = calculatePercentage(curNum);
     } else if(btn.id === 'sign'){
-        display.innerHTML = -display.innerHTML;
-    } else if((curNum === '0' || (num2 === '' && tmp === '')) && btn.id !=='decimal') {
-        displayNum(btn.innerHTML);
+        display.textContent = -parseFloat(curNum);
+    } else if(curNum === '0' || (num2 === '' && tmp === '')) {
+        display.textContent = btn.textContent;
+    } else if(btn.id === 'decimal' && curNum.includes('.')) {
+        display.textContent = curNum
     } else {
-        if(btn.id === 'decimal' && display.innerHTML.includes('.')) return
-        display.innerHTML += btn.innerHTML;
+        display.textContent = curNum + btn.textContent;
     }
-    tmp = display.innerHTML;
-}));
+    tmp = display.textContent;
+}
 
 //Clear display
-const clearButton = document.querySelector('.clear');
-clearButton.addEventListener('click', function(){
+function handleClear(){
     displayNum(0);
     resetVariables();
-})
+}
 
-//Calculator operators
-const operatorButtons = document.querySelectorAll('.operator').forEach(btn => btn.addEventListener('click', function(){
-    if(num1 !== ''){
+//Handle operator input
+function handleOperatorInput(op){
+    if(num1 === ''){
+        num1 = tmp;
+        tmp = '';
+    } else {
         handleCalculation();
         tmp='';
         num1 = result;
         num2 = '';
         result='';
-    } else {
-        num1 = tmp;
-        tmp = '';
     }
-    operator = btn.innerHTML;
-}));
+    operator = this.textContent;
+}
 
-const equalsButton = document.querySelector('.equals');
-equalsButton.addEventListener('click', function(){
-        handleCalculation();
-        num1 = '';
-        num2 = '';
-        tmp = result;
-        operator = '';
-});
+function handleEquals(){
+    handleCalculation();
+    num1 = '';
+    num2 = '';
+    tmp = result;
+    operator = '';
+}
 
 function handleCalculation(){
     num2 = tmp;
     result = operate(operator, parseFloat(num1), parseFloat(num2));
-    if(result !== '' && !isNaN(result)){
+    if(!isNaN(result)){
         displayNum(result);
     }
 }
 
+//Utility functions
+function operate(operator, num1, num2) {
+    return operations[operator](num1, num2);
+}
+
+
+
+function calculatePercentage(num) {
+    const temp = (num / 100) * ((operator === '+' || operator === '-') ? num1 : 1);
+    return temp.toString();
+}
+
 function displayNum(str){
-    display.innerHTML = Math.round(parseFloat(str) * 10000000) / 10000000;
+    display.textContent = Math.round(parseFloat(str) * 10_000_000) / 10_000_000;
 }
 
 function resetVariables(){
@@ -115,3 +106,4 @@ function resetVariables(){
     result = '';
     operator = '';
 }
+
