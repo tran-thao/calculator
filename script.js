@@ -45,6 +45,7 @@ let operator = '';
 const display = document.querySelector('.display');
 let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEventListener('click', function(){
     let curNum = display.innerHTML;
+
     if(curNum === '0'|| operator !== '' || result !== ''){
         if(btn.id === 'percent'){
             let temp = curNum/100;
@@ -53,13 +54,18 @@ let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEve
                 temp = curNum*temp;
             }
             display.innerHTML = temp;
+        } else if(btn.id === 'sign'){
+            display.innerHTML = -display.innerHTML;
         } else {
             displayNum(btn.innerHTML);
         }
     } else {
         if(btn.id === 'percent'){
             display.innerHTML/=100;
-        }else {
+        } else if(btn.id === 'sign'){
+            display.innerHTML = -display.innerHTML;
+        }
+        else {
             display.innerHTML += btn.innerHTML;
         }
         
