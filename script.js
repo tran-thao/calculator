@@ -85,9 +85,12 @@ const operatorButtons = document.querySelectorAll('.operator').forEach(btn => bt
     if(operator != ''){
         num2 = tmp;
         result = operate(operator, parseFloat(num1), parseFloat(num2));
-        displayNum(result);
-        num1 = result;
-        num2 = ''; 
+        if(result !== '' && !isNaN(result)){
+            displayNum(result);
+            num1 = result;
+            num2 = ''; 
+        }
+        
     } else {
         num1 = tmp;
         tmp = '';
@@ -120,3 +123,5 @@ function resetVariables(){
     result = '';
     operator = '';
 }
+
+// 5 + 4 * 3% -89 / 3 
