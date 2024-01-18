@@ -38,37 +38,28 @@ function divide(num1, num2){
     return num1 / num2;
 }
 
-let tmp, num1, num2, result = '';
+let tmp = '';
+let num1 = '';
+let result = '';
+let num2 = '';
 let operator = '';
 
 //Display numbers
 const display = document.querySelector('.display');
 let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEventListener('click', function(){
     let curNum = display.innerHTML;
-
-    if(curNum === '0'|| operator !== '' || result !== ''){
-        if(btn.id === 'percent'){
-            let temp = curNum/100;
-            console.log('button percent')
-            if(operator === '+' || operator === '-'){
-                temp = curNum*temp;
-            }
-            display.innerHTML = temp;
-        } else if(btn.id === 'sign'){
-            display.innerHTML = -display.innerHTML;
-        } else {
-            displayNum(btn.innerHTML);
+    if(btn.id === 'percent'){
+        let temp = curNum/100;
+        if(operator === '+' || operator === '-'){
+            temp = curNum*temp;
         }
+        display.innerHTML = temp;
+    } else if(btn.id === 'sign'){
+        display.innerHTML = -display.innerHTML;
+    } else if(curNum === '0' || (num2 === '' && tmp === '')) {
+        displayNum(btn.innerHTML);
     } else {
-        if(btn.id === 'percent'){
-            display.innerHTML/=100;
-        } else if(btn.id === 'sign'){
-            display.innerHTML = -display.innerHTML;
-        }
-        else {
-            display.innerHTML += btn.innerHTML;
-        }
-        
+        display.innerHTML += btn.innerHTML;
     }
     tmp = display.innerHTML;
 }));
@@ -82,15 +73,14 @@ clearButton.addEventListener('click', function(){
 
 //Calculator operators
 const operatorButtons = document.querySelectorAll('.operator').forEach(btn => btn.addEventListener('click', function(){
-    if(operator != ''){
+    if(num1 !== ''){
         num2 = tmp;
+        tmp='';
         result = operate(operator, parseFloat(num1), parseFloat(num2));
-        if(result !== '' && !isNaN(result)){
-            displayNum(result);
-            num1 = result;
-            num2 = ''; 
-        }
-        
+        displayNum(result);
+        num1 = result;
+        num2 = '';
+        result='';
     } else {
         num1 = tmp;
         tmp = '';
@@ -123,5 +113,3 @@ function resetVariables(){
     result = '';
     operator = '';
 }
-
-// 5 + 4 * 3% -89 / 3 
