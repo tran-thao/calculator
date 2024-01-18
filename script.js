@@ -44,10 +44,25 @@ let operator = '';
 //Display numbers
 const display = document.querySelector('.display');
 let digitButtons = document.querySelectorAll('.digit').forEach(btn => btn.addEventListener('click', function(){
-    if(display.innerHTML === '0'|| operator !== '' || result !== ''){
-        displayNum(btn.innerHTML);
+    let curNum = display.innerHTML;
+    if(curNum === '0'|| operator !== '' || result !== ''){
+        if(btn.id === 'percent'){
+            let temp = curNum/100;
+            console.log('button percent')
+            if(operator === '+' || operator === '-'){
+                temp = curNum*temp;
+            }
+            display.innerHTML = temp;
+        } else {
+            displayNum(btn.innerHTML);
+        }
     } else {
-        display.innerHTML += btn.innerHTML;
+        if(btn.id === 'percent'){
+            display.innerHTML/=100;
+        }else {
+            display.innerHTML += btn.innerHTML;
+        }
+        
     }
     tmp = display.innerHTML;
 }));
